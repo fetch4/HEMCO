@@ -26,6 +26,13 @@ add_library(HCOX STATIC EXCLUDE_FROM_ALL
 	hcox_volcano_mod.F90
 	ocean_toolbox_mod.F90
 )
+if (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
+    set_source_files_properties(
+        hcox_dustdead_mod.F
+        $<$<BOOL:${TOMAS}>:hcox_tomas_dustdead_mod.F>
+        PROPERTIES COMPILE_FLAGS "-fixed"
+    )
+endif()
 target_link_libraries(HCOX
 	PUBLIC HCO
 )
