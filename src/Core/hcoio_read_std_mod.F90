@@ -1,9 +1,10 @@
 !BOC
-#if defined ( MODEL_GCCLASSIC ) || defined( MODEL_WRF ) || defined( MODEL_CESM ) || defined( HEMCO_STANDALONE )
+#if defined ( MODEL_GCCLASSIC ) || defined( MODEL_WRF ) || defined( MODEL_CESM ) || defined( MODEL_GISS ) || defined( HEMCO_STANDALONE )
 ! The 'standard' HEMCO I/O module is used for:
 ! - HEMCO Standalone (HEMCO_STANDALONE)
 ! - GEOS-Chem 'Classic' (MODEL_GCCLASSIC)
 ! - WRF-GC (MODEL_WRF)
+! - GISS-GC (MODEL_GISS)
 ! - CESM-GC and CAM-Chem / HEMCO-CESM (MODEL_CESM)
 !EOC
 !------------------------------------------------------------------------------
@@ -61,7 +62,7 @@ MODULE HCOIO_Read_Mod
   ! Parameter used for difference testing of floating points
   REAL(dp), PRIVATE, PARAMETER :: EPSILON = 1.0e-5_dp
 
-#if defined( MODEL_CESM ) || defined( MODEL_WRF )
+#if defined( MODEL_CESM ) || defined( MODEL_WRF ) || defined( MODEL_GISS )
   REAL(hp), PRIVATE            :: GC_72_EDGE_SIGMA(73) = (/ &
     1.000000E+00, 9.849998E-01, 9.699136E-01, 9.548285E-01, 9.397434E-01, 9.246593E-01, &
     9.095741E-01, 8.944900E-01, 8.794069E-01, 8.643237E-01, 8.492406E-01, 8.341584E-01, &
@@ -695,7 +696,7 @@ CONTAINS
        ! going to 72 levels. Otherwise, use MESSy (nbalasus, 8/24/2023).
        IF ( Lct%Dct%Dta%Levels == 0 ) THEN
 
-#if defined( MODEL_CESM ) || defined( MODEL_WRF )
+#if defined( MODEL_CESM ) || defined( MODEL_WRF ) || defined( MODEL_GISS )
 
           ! In WRF/CESM, IsModelLevel has a different meaning of "GEOS-Chem levels"
           ! because the models in WRF and CESM are user-defined and thus fixed input
@@ -1350,7 +1351,7 @@ CONTAINS
        UseMESSy = .TRUE.
     ENDIF
 
-#if defined( MODEL_CESM ) || defined( MODEL_WRF )
+#if defined( MODEL_CESM ) || defined( MODEL_WRF ) || defined( MODEL_GISS )
     ! If in WRF or the CESM environment, the vertical grid is arbitrary.
     ! MESSy regridding ALWAYS has to be used.
     IF ( nlev > 1 ) THEN
@@ -1379,7 +1380,7 @@ CONTAINS
           CALL HCO_MSG(HcoState%Config%Err,MSG)
        ENDIF
 
-#if !defined( MODEL_CESM ) && !defined( MODEL_WRF )
+#if !defined( MODEL_CESM ) && !defined( MODEL_WRF ) && !defined( MODEL_GISS )
        ! If we do MESSy regridding, we can only do one time step
        ! at a time at the moment!
        IF ( tidx1 /= tidx2 ) THEN
@@ -1394,7 +1395,7 @@ CONTAINS
        ! This has to be used for WRF-GC and CESM so ifdefd out
 #endif
 
-#if defined( MODEL_WRF ) || defined( MODEL_CESM )
+#if defined( MODEL_WRF ) || defined( MODEL_CESM ) || defined( MODEL_GISS )
        !--------------------------------------------------------------
        ! Eventually get sigma levels
        ! For files that have hardcoded GEOS-Chem "index"-based levels,
@@ -1487,7 +1488,7 @@ CONTAINS
 
        ENDIF ! nlev>1
 
-#if defined( MODEL_WRF ) || defined( MODEL_CESM )
+#if defined( MODEL_WRF ) || defined( MODEL_CESM ) || defined( MODEL_GISS )
        ! Input data is "never" on model levels because model levels can change! (hplin, 5/29/20)
        IsModelLevel = .false.
 #endif
