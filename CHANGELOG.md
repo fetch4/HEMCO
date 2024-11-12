@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.9.3] - 2024-08-13
+### Fixed
+- Added brackets around `exempt-issue-labels` list in `.github/workflows/stale.yml`
+
+## [3.9.2] - 2024-07-24
+### Changed
+- RTD updates: Converted several `:option:` tags to subsections and updated references accordingly
+
+### Fixed
+- Typos in RTD doc file `docs/source/hco_ref_guide/hemco-config.rst`
+
+### Removed
+- Manual `InvMEGAN` diagnostics from `src/Extensions/hcox_megan_mod.F90`; Activate these with `HEMCO_Diagn.rc` instead
+
 ## [3.9.1] - 2024-06-28
 ### Fixed
 - Fixed formatting error in `.github/workflows/stale.yml` that caused the Mark Stale Issues action not to run
