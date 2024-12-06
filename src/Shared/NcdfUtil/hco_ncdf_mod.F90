@@ -2696,6 +2696,11 @@ CONTAINS
 
     ! Read ps
     !--------
+    IF ( .NOT. Ncdoes_Var_Exist( fID, TRIM(psname) ) ) THEN
+       WRITE(*,*) 'Cannot find variable ', TRIM(psname), '!'
+       RC = -999
+       RETURN
+    ENDIF
     CALL NC_READ_ARR( fID, TRIM(psname), lon1, lon2, lat1, &
                       lat2, 0, 0, time,  time, ps, VarUnit=thisUnit, RC=RC )
     IF ( RC /= 0 ) RETURN
