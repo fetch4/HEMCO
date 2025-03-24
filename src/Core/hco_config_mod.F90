@@ -2106,6 +2106,7 @@ CONTAINS
 
 #ifndef MODEL_GEOS
 #ifndef MODEL_WRF
+#ifndef MODEL_GISS
 #ifndef MODEL_CESM
 #ifndef ESMF_
     !=======================================================================
@@ -2145,6 +2146,7 @@ CONTAINS
        END SELECT
        HcoConfig%GridRes = TRIM( GridRes )
     ENDIF
+#endif
 #endif
 #endif
 #endif
@@ -2430,7 +2432,7 @@ CONTAINS
           !
           ! Thus, the following fix needs to be applied for ESMF environments,
           ! skipping a lot of the calculations below.
-#if defined ( ESMF_ ) || defined( MODEL_WRF ) || defined( MODEL_CESM )
+#if defined ( ESMF_ ) || defined( MODEL_WRF ) || defined( MODEL_CESM ) || defined( MODEL_GISS )
           ThisCover = -1
 #else
           ! Get mask edges
