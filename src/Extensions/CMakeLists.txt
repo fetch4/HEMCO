@@ -9,6 +9,7 @@ add_library(HCOX STATIC EXCLUDE_FROM_ALL
 	hcox_finn_include.FINNv16
 	hcox_finn_mod.F90
 	hcox_finn_mod.FINNv16
+	hcox_cosmogenic_mod.F90
 	hcox_gc_POPs_mod.F90
 	hcox_gc_RnPbBe_mod.F90
 	hcox_gfed_mod.F90
