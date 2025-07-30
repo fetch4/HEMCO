@@ -106,6 +106,7 @@ CONTAINS
     USE HCOX_GFED_Mod,          ONLY : HCOX_GFED_Init
     USE HCOX_MEGAN_Mod,         ONLY : HCOX_MEGAN_Init
     USE HCOX_Finn_Mod,          ONLY : HCOX_FINN_Init
+    USE HCOX_Cosmogenic_Mod,    ONLY : HCOX_Cosmogenic_Init
     USE HCOX_GC_RnPbBe_Mod,     ONLY : HCOX_GC_RnPbBe_Init
     USE HCOX_GC_POPs_Mod,       ONLY : HCOX_GC_POPs_Init
     USE HCOX_Volcano_Mod,       ONLY : HCOX_Volcano_Init
@@ -313,6 +314,16 @@ CONTAINS
        ENDIF
 
        !--------------------------------------------------------------------
+       ! Extension for cosmogenic production
+       !--------------------------------------------------------------------
+       CALL HCOX_Cosmogenic_Init( HcoState, 'Cosmogenic', ExtState,  RC )
+       IF ( RC /= HCO_SUCCESS ) THEN
+          ErrMsg = 'Error encountered in "HCOX_Cosmogenic_Init"!'
+          CALL HCO_ERROR( ErrMsg, RC, ThisLoc )
+          RETURN
+       ENDIF
+
+       !--------------------------------------------------------------------
        ! Extension for GEOS-Chem Rn-Pb-Be specialty simulation
        !--------------------------------------------------------------------
        CALL HCOX_GC_RnPbBe_Init( HcoState, 'GC_Rn-Pb-Be', ExtState,  RC )
@@ -420,6 +431,7 @@ CONTAINS
     USE HCOX_Megan_Mod,         ONLY : HCOX_Megan_Run
     USE HCOX_GFED_Mod,          ONLY : HCOX_GFED_Run
     USE HCOX_FINN_Mod,          ONLY : HCOX_FINN_Run
+    USE HCOX_Cosmogenic_Mod,    ONLY : HCOX_Cosmogenic_Run
     USE HCOX_GC_RnPbBe_Mod,     ONLY : HCOX_GC_RnPbBe_Run
     USE HCOX_GC_POPs_Mod,       ONLY : HCOX_GC_POPs_Run
     USE HCOX_Volcano_Mod,       ONLY : HCOX_Volcano_Run
@@ -656,6 +668,18 @@ CONTAINS
        ENDIF
 
        !--------------------------------------------------------------------
+       ! Emissions for cosmogenic production
+       !--------------------------------------------------------------------
+       IF ( ExtState%Cosmogenic > 0 ) THEN
+          CALL HCOX_Cosmogenic_Run( ExtState, HcoState, RC )
+          IF ( RC /= HCO_SUCCESS ) THEN
+             ErrMsg = 'Error encountered in "HCOX_Cosmogenic_Run"!'
+             CALL HCO_ERROR( ErrMsg, RC, ThisLoc )
+             RETURN
+          ENDIF
+       ENDIF
+
+       !--------------------------------------------------------------------
        ! Emissions for GEOS-Chem Rn-Pb-Be specialty simulation
        !--------------------------------------------------------------------
        IF ( ExtState%GC_RnPbBe > 0 ) THEN
@@ -763,6 +787,7 @@ CONTAINS
     USE HCOX_MEGAN_Mod,         ONLY : HCOX_MEGAN_Final
     USE HCOX_GFED_Mod,          ONLY : HCOX_GFED_Final
     USE HCOX_FINN_Mod,          ONLY : HCOX_FINN_Final
+    USE HCOX_Cosmogenic_Mod,    ONLY : HCOX_Cosmogenic_Final
     USE HCOX_GC_RnPbBe_Mod,     ONLY : HCOX_GC_RnPbBe_Final
     USE HCOX_GC_POPs_Mod,       ONLY : HCOX_GC_POPs_Final
     USE HCOX_Volcano_Mod,       ONLY : HCOX_Volcano_Final
@@ -858,6 +883,10 @@ CONTAINS
 
           IF ( ExtState%FINN > 0      ) THEN
              CALL HcoX_FINN_Final( ExtState )
+          ENDIF
+
+          IF ( ExtState%Cosmogenic > 0 ) THEN
+             CALL HCOX_Cosmogenic_Final( ExtState )
           ENDIF
 
           IF ( ExtState%GC_RnPbBe > 0 ) THEN
