@@ -221,7 +221,7 @@ CONTAINS
     call check( nf90_get_var( ncid3, varid, Val3D, (/YearI-1700+1,DOY,2/), (/1,1,1/) ) )
     POLE_LAT = Val3D(1,1,1)
     call check( nf90_close(ncid3) )
-    print*,'Magnetic Pole and PHI:',Year,DOY,POLE_LON,POLE_LAT,PHI
+    !print*,'Magnetic Pole and PHI:',Year,DOY,POLE_LON,POLE_LAT,PHI
 
     !=======================================================================
     ! Compute 14CO emissions [kg/m2/s]
